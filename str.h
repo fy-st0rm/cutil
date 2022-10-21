@@ -59,18 +59,35 @@ static void cutil_str_add_char(str* dest, char src) {
 	dest->c_str[dest->len-1] = src;
 }
 
+// Helpful functions
 static str cutil_str_split(str* src, char ch) {
 	str new_s = cutil_str_new("");
 
 	char i = *(src->c_str)++;
-	cutil_str_add_char(&new_s, (char*) i);
+	cutil_str_add_char(&new_s, i);
 	
 	while (i != ch) {
 		i = *(src->c_str)++;
-		cutil_str_add_char(&new_s, (char*) i);
+		cutil_str_add_char(&new_s, i);
 
 		if (!i) break;
 	}
+	return new_s;
+}
+
+#define cutil_str_slice(src, start, end)\
+	__str_slice(src, start, end, __FILE__, __LINE__);\
+
+static str __str_slice(str* src, int start, int end, const char* file, int line) {
+	str new_s = cutil_str_new("");
+	cutil_assert(start < end, "%s:%d: Start position should be less then end position\n", file, line);
+	cutil_assert(start <= src->len, "%s:%d: Start position should be less then string length\n", file, line);
+	cutil_assert(end <= src->len, "%s:%d: End position should be less then string length\n", file, line);
+
+	for (int i = start; i <= end; i++) {
+		cutil_str_add_char(&new_s, src->c_str[i]);
+	}
+
 	return new_s;
 }
 

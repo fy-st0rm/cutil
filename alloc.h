@@ -3,9 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <stdbool.h>
 #include <string.h>
+
+#include "misc.h"
 
 #define ALLOC_BUFF_SZ 1024
 
@@ -38,7 +39,7 @@ static void* __alloc(int size, const char* file, int line) {
 		line 
 	};
 
-	assert(alloc_buff_sz < ALLOC_BUFF_SZ && "Alloc buffer ran out of memory.");
+	cutil_assert(alloc_buff_sz < ALLOC_BUFF_SZ, "Alloc buffer ran out of memory at %s:%d\n", file, line);
 
 	alloc_buffer[alloc_buff_sz] = mem;
 	++alloc_buff_sz;

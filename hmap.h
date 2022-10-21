@@ -37,8 +37,7 @@ static void cutil_hmap_delete(Hmap* hmap) {
 }
 
 // Functions to calculate hash codes
-unsigned long hash_code(const char* key)
-{
+unsigned long hash_code(const char* key) {
 	unsigned long hash = 5381;
 	int c;
 	while (c = *key++)
@@ -60,13 +59,13 @@ static void cutil_hmap_adds(Hmap* hmap, const char* key, void* value) {
 }
 
 static void cutil_hmap_addc(char key, void* value) {
-	assert(false && "cutil_hmap_addc hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_addc hasnt been implemented yet!");
 }
 static void cutil_hmap_addi(int key, void* value) {
-	assert(false && "cutil_hmap_addi hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_addi hasnt been implemented yet!");
 }
 static void cutil_hmap_addf(float key, void* value) {
-	assert(false && "cutil_hmap_addf hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_addf hasnt been implemented yet!");
 }
 
 // Function to remove item
@@ -77,13 +76,13 @@ static void cutil_hmap_removes(Hmap* hmap, const char* key) {
 }
 
 static void cutil_hmap_removec(Hmap* hmap, char key) {
-	assert(false && "cutil_hmap_removec hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_removec hasnt been implemented yet!");
 }
 static void cutil_hmap_removei(Hmap* hmap, int key) {
-	assert(false && "cutil_hmap_removei hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_removei hasnt been implemented yet!");
 }
 static void cutil_hmap_removef(Hmap* hmap, float key) {
-	assert(false && "cutil_hmap_removef hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_removef hasnt been implemented yet!");
 }
 
 // Function to get item
@@ -94,13 +93,13 @@ static void* cutil_hmap_gets(Hmap* hmap, const char* key) {
 }
 
 static void* cutil_hmap_getc(Hmap* hmap, char key) {
-	assert(false && "cutil_hmap_getc hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_getc hasnt been implemented yet!");
 }
 static void* cutil_hmap_geti(Hmap* hmap, int key) {
-	assert(false && "cutil_hmap_geti hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_geti hasnt been implemented yet!");
 }
 static void* cutil_hmap_getf(Hmap* hmap, float key) {
-	assert(false && "cutil_hmap_getf hasnt been implemented yet!");
+	cutil_assert(false , "cutil_hmap_getf hasnt been implemented yet!");
 }
 
 // Print function
