@@ -23,17 +23,17 @@ typedef struct {
 	int max_sz;
 } Hmap;
 
-static Hmap* cutil_hmap_new(int max_sz) {
-	Hmap* hmap = cutil_alloc(sizeof(Hmap));
-	hmap->buffer = cutil_alloc(sizeof(Hmap_node) * max_sz);
-	hmap->buff_sz = 0;
-	hmap->max_sz = max_sz;
+static Hmap cutil_hmap_new(int max_sz) {
+	Hmap hmap = {
+		.buffer = cutil_alloc(sizeof(Hmap_node) * max_sz),
+		.buff_sz = 0,
+		.max_sz = max_sz
+	};
 	return hmap;
 }
 
 static void cutil_hmap_delete(Hmap* hmap) {
 	cutil_free(hmap->buffer);
-	cutil_free(hmap);
 }
 
 // Functions to calculate hash codes

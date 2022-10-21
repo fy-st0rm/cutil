@@ -5,6 +5,7 @@ usage:
 	@echo Test names:
 	@echo ---- alloc
 	@echo ---- hmap
+	@echo ---- str
 
 alloc:
 	$(CC) -c tests/alloc_test.c
@@ -18,3 +19,8 @@ hmap:
 	rm hmap_test.o
 	./hmap_test
 
+str:
+	$(CC) -c tests/str_test.c
+	$(CC) -o str_test str_test.o
+	rm str_test.o
+	./str_test
