@@ -15,17 +15,14 @@ typedef struct {
 // Extends the string according to the given size
 static void cutil_str_extend(str* s, int i) {
 	s->len += i;
-	if (s->len >= s->size)
-		__str_extend(s);
-}
+	if (s->len >= s->size) {
+		char tmp[s->len];
+		strcpy(tmp, s->c_str);
 
-static void __str_extend(str* s) {
-	char tmp[s->len];
-	strcpy(tmp, s->c_str);
-
-	cutil_free(s->c_str);
-	s->c_str = cutil_alloc(s->len + BIAS);
-	strcpy(s->c_str, tmp);
+		cutil_free(s->c_str);
+		s->c_str = cutil_alloc(s->len + BIAS);
+		strcpy(s->c_str, tmp);
+	}
 }
 
 // String constructor
