@@ -64,10 +64,10 @@ static str cutil_str_split(str* src, char ch) {
 	char i;
 	do { 
 		i = *(src->c_str)++;
-		src->len--;
-
 		if (!i) break;
+
 		if (i != ch) cutil_str_add_char(&new_s, i);
+		src->len--;
 
 	} while (i != ch);
 	return new_s;
