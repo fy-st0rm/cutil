@@ -16,7 +16,7 @@ typedef struct {
 static void cutil_str_extend(str* s, int i) {
 	s->len += i;
 	if (s->len >= s->size)
-		__str_extend(s)
+		__str_extend(s);
 }
 
 static void __str_extend(str* s) {
