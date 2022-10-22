@@ -38,6 +38,7 @@ static void* __alloc(int size, const char* file, int line) {
 		file,
 		line 
 	};
+	memset(mem.ptr, 0, size);
 
 	cutil_assert(alloc_buff_sz < ALLOC_BUFF_SZ, "Alloc buffer ran out of memory at %s:%d\n", file, line);
 
