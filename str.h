@@ -61,15 +61,20 @@ static void cutil_str_add_char(str* dest, char src) {
 static str cutil_str_split(str* src, char ch) {
 	str new_s = cutil_str_new("");
 	
-	char i;
-	do { 
-		i = *(src->c_str)++;
-		if (!i) break;
+	char i, j;
+top:
+	i = *(src->c_str)++;
+	j = src->c_str[0];
+	src->len--;
 
+	if (!i) {
+		src->len = 0;
+	}
+	else if ((i == ch && j == ch) || (i != ch)) {
 		if (i != ch) cutil_str_add_char(&new_s, i);
-		src->len--;
+		goto top;
+	}
 
-	} while (i != ch);
 	return new_s;
 }
 
