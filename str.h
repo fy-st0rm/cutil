@@ -62,10 +62,12 @@ static str cutil_str_split(str* src, char ch) {
 	str new_s = cutil_str_new("");
 
 	char i = *(src->c_str)++;
+	src->len--;
 	cutil_str_add_char(&new_s, i);
 	
 	while (i != ch) {
 		i = *(src->c_str)++;
+		src->len--;
 		cutil_str_add_char(&new_s, i);
 
 		if (!i) break;

@@ -22,8 +22,10 @@ void test_str_split() {
 	printf("-----STRING SPLIT TEST--------\n");
 	str a = cutil_str_new("Hello world");
 	printf("Org str: %s\n", a.c_str);
+	printf("Org size: %d\n", a.len);
 	str b = cutil_str_split(&a, ' ');
 	printf("New str: %s\n", a.c_str);
+	printf("New size: %d\n", a.len);
 	printf("Splitted half: %s\n", b.c_str);
 
 	cutil_str_delete(&a);
