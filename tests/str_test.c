@@ -20,13 +20,10 @@ void test_str_add() {
 
 void test_str_split() {
 	printf("-----STRING SPLIT TEST--------\n");
-	str a = cutil_str_new("Hello world");
-	printf("Org str: %s\n", a.c_str);
-	printf("Org size: %d\n", a.len);
-	str b = cutil_str_split(&a, ' ');
-	printf("New str: %s\n", a.c_str);
-	printf("New size: %d\n", a.len);
-	printf("Splitted half: %s\n", b.c_str);
+	str a = cutil_str_new("Hello world\n");
+	str b = cutil_str_split(&a, '\n');
+	printf("%s\n", b.c_str);
+	printf("%d\n", a.len);
 
 	cutil_str_delete(&a);
 	cutil_str_delete(&b);
