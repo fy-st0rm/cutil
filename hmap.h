@@ -37,7 +37,7 @@ static void cutil_hmap_delete(Hmap* hmap) {
 }
 
 // Functions to calculate hash codes
-unsigned long hash_code(const char* key) {
+static unsigned long hash_code(const char* key) {
 	unsigned long hash = 5381;
 	int c;
 	while (c = *key++)
