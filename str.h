@@ -13,10 +13,11 @@ typedef struct {
 } str;
 
 // Extends the string according to the given size
-#define cutil_str_extend(s, i)\
-	s->len += i;\
-	if (s->len >= s->size)\
+static void cutil_str_extend(str* s, int i) {
+	s->len += i;
+	if (s->len >= s->size)
 		__str_extend(s)
+}
 
 static void __str_extend(str* s) {
 	char tmp[s->len];
