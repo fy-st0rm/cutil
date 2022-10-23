@@ -55,6 +55,7 @@ static void cutil_str_add_c_str(str* dest, char* src) {
 static void cutil_str_add_char(str* dest, char src) {
 	cutil_str_extend(dest, 1);
 	dest->c_str[dest->len-1] = src;
+	dest->c_str[dest->len] = '\0';
 }
 
 // Helpful functions

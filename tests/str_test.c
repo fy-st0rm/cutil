@@ -20,8 +20,9 @@ void test_str_add() {
 
 void test_str_split() {
 	printf("-----STRING SPLIT TEST--------\n");
-	str a = cutil_str_new("Hello  world");
+	str a = cutil_str_new("hello");
 	str b = cutil_str_split(&a, '\n');
+	printf("%d %d\n", b.len, strlen(b.c_str));
 	printf("%s\n", a.c_str);
 	printf("%s\n", b.c_str);
 	printf("%d\n", a.len);
