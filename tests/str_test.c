@@ -40,11 +40,35 @@ void test_str_slice() {
 	cutil_str_delete(&b);
 }
 
+void test_str_insert() {
+	printf("-----STRING INSERT TEST--------\n");
+	str a = cutil_str_new("Hello world");
+	cutil_str_insert(&a, 5, ',');
+	printf("Middle inserted: %s\n", a.c_str);
+	cutil_str_insert(&a, a.len, '.');
+	printf("Last inserted: %s\n", a.c_str);
+	cutil_str_delete(&a);
+}
+
+void test_str_pop() {
+	printf("-------STRING POP TEST-----------\n");
+	str a = cutil_str_new("Hello world");
+	cutil_str_pop(&a, 5);
+	printf("Middle poped: %s\n", a.c_str);
+	cutil_str_pop(&a, 0);
+	printf("Front poped: %s\n", a.c_str);
+	cutil_str_pop(&a, a.len-1);
+	printf("Last poped: %s\n", a.c_str);
+	cutil_str_delete(&a);
+}
+
 int main() {
 	test_hello_world();
 	test_str_add();
 	test_str_split();
 	test_str_slice();
+	test_str_insert();
+	test_str_pop();
 	cutil_alert();
 	return 0;
 }

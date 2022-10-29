@@ -80,7 +80,7 @@ top:
 }
 
 #define cutil_str_slice(src, start, end)\
-	__str_slice(src, start, end, __FILE__, __LINE__);\
+	__str_slice(src, start, end, __FILE__, __LINE__)
 
 static str __str_slice(str* src, int start, int end, const char* file, int line) {
 	str new_s = cutil_str_new("");
@@ -93,6 +93,29 @@ static str __str_slice(str* src, int start, int end, const char* file, int line)
 	}
 
 	return new_s;
+}
+
+#define cutil_str_insert(s, index, ch)\
+	__str_insert(s, index, ch, __FILE__, __LINE__)
+
+static void __str_insert(str* s, int index, char ch, const char* file, int line) {
+	cutil_assert(index <= s->len, "%s:%d: Index should be less then length of the string.\n");
+	cutil_str_extend(s, 1);
+
+	str slice = cutil_str_slice(s, index, s->len);
+	s->c_str[index] = ch;
+	strcpy(s->c_str + index + 1, slice.c_str);
+	s->c_str[s->len] = '\0';
+	cutil_str_delete(&slice);
+}
+
+#define cutil_str_pop(s, index)\
+	__str_pop(s, index, __FILE__, __LINE__)
+
+static void __str_pop(str* s, int index, const char* file, int line) {
+	cutil_assert(index <= s->len, "%s:%d: Index should be less then length of the string.\n");
+	memmove(s->c_str + index, s->c_str + index + 1, s->len - index);
+	s->len--;
 }
 
 #endif
