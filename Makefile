@@ -6,6 +6,7 @@ usage:
 	@echo ---- alloc
 	@echo ---- hmap
 	@echo ---- str
+	@echo ---- list
 
 alloc:
 	$(CC) -c alloc.c tests/alloc_test.c
@@ -24,3 +25,9 @@ str:
 	$(CC) -o str_test *.o
 	rm str_test.o
 	./str_test
+
+list:
+	$(CC) -c alloc.c tests/list_test.c
+	$(CC) -o list_test *.o
+	rm list_test.o
+	./list_test
