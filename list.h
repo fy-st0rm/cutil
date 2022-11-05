@@ -41,8 +41,33 @@
 	}\
 	list->value[list->len++] = x;
 
+#define cutil_list_remove_by_idx(list, idx)\
+	if (list == NULL) cutil_assert(false, "List is null.\n");\
+	cutil_assert(list->len > idx, "Index out of bounds. Index: %d, Length of list: %d\n", idx, list->len);\
+	memmove(&list->value[idx], &list->value[idx+1], sizeof(*list->value) * (--list->len - idx));
+
+#define cutil_list_remove_by_val(list, val)\
+	if (list == NULL) cutil_assert(false, "List is null.\n");\
+	int i;\
+	for (i = 0; i < list->len; i++) {\
+		if (list->value[i] == val) {\
+			cutil_list_remove_by_idx(list, i);\
+			i = 0;\
+			break;\
+		}\
+	}\
+	cutil_assert(i < list->len, "Cannot find the required value in the list.\n");\
+
+// TODO: Temporary ig
+#define cutil_list_clear(list)\
+	list->len = 0;\
+
+#define cutil_list_pop(list, idx)\
+	cutil_list_get(list, idx);\
+	cutil_list_remove_by_idx(list, idx);
+
 #define cutil_list_get(list, idx)\
-	(idx < list->len) ? list->value[idx] : 0;\
+	list->value[idx];\
 	cutil_assert(list->len > idx, "Index out of bounds. Index: %d, Length of list: %d\n", idx, list->len);
 
 #endif
