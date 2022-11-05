@@ -1,15 +1,10 @@
 #include "../hmap.h"
 
 int main() {
-	Hmap hmap = cutil_hmap_new(10);
-
-	cutil_hmap_adds(&hmap, "Hello", 10);
-	cutil_print_hmap_buffer(&hmap);
-	printf("%p\n", cutil_hmap_gets(&hmap, "Hello"));
-	cutil_hmap_removes(&hmap, "Hello");
-	cutil_print_hmap_buffer(&hmap);
-
-	cutil_hmap_delete(&hmap);
+	cutil_hmap_def(int, int) map = NULL;
+	cutil_hmap_add(map, 10, 110);
+	int a = cutil_hmap_get(map, 10);
+	printf("%d\n", a);
 	cutil_alert();
 	return 0;
 }

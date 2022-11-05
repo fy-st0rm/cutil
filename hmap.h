@@ -3,6 +3,78 @@
 
 #include "alloc.h"
 
+#define HMAP_SIZE_BIAS 10
+
+// Functions to calculate hash codes
+static unsigned long __hash_data(char* data) {
+	unsigned long hash = 5381;
+	int c;
+	while (c = *data++) {
+		hash = ((hash << 5) + hash) + c; // hash * 33 + c
+	}
+	return hash;
+}
+
+#define __cutil_hmap_entry_def(k_type, v_type)\
+	struct {\
+		k_type key;\
+		v_type val;\
+	}
+
+#define cutil_hmap_def(k_type, v_type)\
+	struct {\
+		__cutil_hmap_entry_def(k_type, v_type)* data;\
+		k_type tmp_key;\
+		uint64_t len;\
+		uint64_t size;\
+	}*
+
+#define cutil_hmap_init(hmap)\
+	do {\
+		hmap = cutil_alloc(sizeof(*hmap));\
+		hmap->len = 0;\
+		hmap->size = HMAP_SIZE_BIAS;\
+		hmap->data = cutil_alloc(hmap->size);\
+	} while(0)
+
+#define cutil_hmap_extend(hmap, amt)\
+	do {\
+		void* tmp = cutil_alloc(hmap->size);\
+		memcpy(tmp, hmap->data, hmap->size);\
+		cutil_free(hmap->data);\
+		hmap->size += amt;\
+		hmap->data = cutil_alloc(hmap->size);\
+		memcpy(hmap->data, tmp, sizeof(tmp));\
+		cutil_free(tmp);\
+	} while(0)
+
+// TODO: Implement data collision
+#define cutil_hmap_add(hmap, _k, _v)\
+	do {\
+		if (hmap == NULL) {\
+			cutil_hmap_init(hmap);\
+		}\
+		if (hmap->len + 1 >= hmap->size) {\
+			cutil_hmap_extend(hmap, HMAP_SIZE_BIAS);\
+		}\
+		\
+		hmap->tmp_key = _k;\
+		unsigned long hash = __hash_data((char*)&hmap->tmp_key);\
+		int idx = hash & (hmap->size - 1);\
+		\
+		hmap->data[idx].key = _k;\
+		hmap->data[idx].val = _v;\
+		hmap->len++;\
+	} while(0)
+
+// TODO: Check the key match
+#define cutil_hmap_get(hmap, _k)\
+	(\
+		hmap->tmp_key = _k,\
+		hmap->data[__hash_data((char*)&hmap->tmp_key) & (hmap->size - 1)].val\
+	)
+
+/*
 // Hash map Node
 typedef struct Hmap_node Hmap_node;
 struct Hmap_node {
@@ -41,7 +113,7 @@ static unsigned long hash_code(const char* key) {
 	unsigned long hash = 5381;
 	int c;
 	while (c = *key++)
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+		hash = ((hash << 5) + hash) + c; // hash * 33 + c
 	return hash;
 }
 
@@ -110,5 +182,6 @@ static void cutil_print_hmap_buffer(Hmap* hmap) {
 	}
 	printf("---------HMAP BUFFER END----------\n");
 }
+*/
 
 #endif
