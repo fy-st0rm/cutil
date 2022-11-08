@@ -15,19 +15,37 @@ static unsigned long __hash_data(char* data) {
 	return hash;
 }
 
+typedef enum {
+	HMAP_ACTIVE,
+	HMAP_INACTIVE
+} Cutil_Hmap_State;
+
 #define __cutil_hmap_entry_def(k_type, v_type)\
 	struct {\
 		k_type key;\
 		v_type val;\
+		Cutil_Hmap_State state;\
 	}
 
 #define cutil_hmap_def(k_type, v_type)\
 	struct {\
 		__cutil_hmap_entry_def(k_type, v_type)* data;\
 		k_type tmp_key;\
+		v_type tmp_val;\
 		uint64_t len;\
 		uint64_t size;\
 	}*
+
+#define cutil_hmap_delete(hmap)\
+	cutil_free(hmap->data);\
+	cutil_free(hmap)
+
+#define __hmap_init_data(hmap, start, end)\
+	do {\
+		for (int i = start; i < end; i++) {\
+			hmap->data[i].state = HMAP_INACTIVE;\
+		}\
+	} while(0)
 
 #define cutil_hmap_init(hmap)\
 	do {\
@@ -35,6 +53,7 @@ static unsigned long __hash_data(char* data) {
 		hmap->len = 0;\
 		hmap->size = HMAP_SIZE_BIAS;\
 		hmap->data = cutil_alloc(hmap->size);\
+		__hmap_init_data(hmap, 0, hmap->size);\
 	} while(0)
 
 #define cutil_hmap_extend(hmap, amt)\
@@ -46,6 +65,7 @@ static unsigned long __hash_data(char* data) {
 		hmap->data = cutil_alloc(hmap->size);\
 		memcpy(hmap->data, tmp, sizeof(tmp));\
 		cutil_free(tmp);\
+		__hmap_init_data(hmap, hmap->len, hmap->size);\
 	} while(0)
 
 // TODO: Implement data collision
@@ -62,17 +82,37 @@ static unsigned long __hash_data(char* data) {
 		unsigned long hash = __hash_data((char*)&hmap->tmp_key);\
 		int idx = hash & (hmap->size - 1);\
 		\
+		cutil_assert(hmap->data[idx].state == HMAP_INACTIVE, "Data collision\n");\
 		hmap->data[idx].key = _k;\
 		hmap->data[idx].val = _v;\
+		hmap->data[idx].state = HMAP_ACTIVE;\
 		hmap->len++;\
 	} while(0)
 
-// TODO: Check the key match
+bool __hmap_exists(void** data, void* key, uint64_t cap, size_t stride) {
+	// Calculating the index from the hash
+	unsigned long h2 = __hash_data((char*) &key);
+	int idx = h2 & (cap - 1);
+
+	// Getting key and state from the data structure
+	int k = ((char*)(*data + (idx * stride)))[0];
+	Cutil_Hmap_State s = ((char*)(*data + (idx * stride)))[stride - sizeof(Cutil_Hmap_State)];
+
+	unsigned long h1 = __hash_data((char*) &k);
+	if (h1 == h2 && s == HMAP_ACTIVE)
+		return true;
+	return false;
+}
+
+#define cutil_hmap_exists(hmap, _k)\
+	__hmap_exists(&hmap->data, (void*) _k, hmap->size, sizeof(*(hmap->data)))
+
 #define cutil_hmap_get(hmap, _k)\
 	(\
 		hmap->tmp_key = _k,\
 		hmap->data[__hash_data((char*)&hmap->tmp_key) & (hmap->size - 1)].val\
-	)
+	);\
+	cutil_assert(cutil_hmap_exists(hmap, _k), "Required key doesnt exists.\n")
 
 /*
 // Hash map Node

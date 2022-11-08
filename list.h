@@ -48,14 +48,14 @@
 		if (list->len + 1 >= list->size) {\
 			cutil_list_extend(list, LIST_SIZE_BIAS);\
 		}\
-		list->value[list->len++] = x;
+		list->value[list->len++] = x;\
 	} while(0)
 
 #define cutil_list_remove_by_idx(list, idx)\
 	do {\
 		if (list == NULL) cutil_assert(false, "List is null.\n");\
 		cutil_assert(list->len > idx, "Index out of bounds. Index: %d, Length of list: %d\n", idx, list->len);\
-		memmove(&list->value[idx], &list->value[idx+1], sizeof(*list->value) * (--list->len - idx));
+		memmove(&list->value[idx], &list->value[idx+1], sizeof(*list->value) * (--list->len - idx));\
 	} while(0)
 
 #define cutil_list_remove_by_val(list, val)\
@@ -76,15 +76,11 @@
 #define cutil_list_clear(list) list->len = 0
 
 #define cutil_list_pop(list, idx)\
-	do {\
-		cutil_list_get(list, idx);\
-		cutil_list_remove_by_idx(list, idx);\
-	} while(0)
+	cutil_list_get(list, idx);\
+	cutil_list_remove_by_idx(list, idx);\
 
 #define cutil_list_get(list, idx)\
-	do {\
-		list->value[idx];\
-		cutil_assert(list->len > idx, "Index out of bounds. Index: %d, Length of list: %d\n", idx, list->len);\
-	} while(0)
+	list->value[idx];\
+	cutil_assert(list->len > idx, "Index out of bounds. Index: %d, Length of list: %d\n", idx, list->len);\
 
 #endif
